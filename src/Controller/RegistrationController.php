@@ -37,10 +37,9 @@ class RegistrationController extends AbstractController
                 $errorsString = (string) $errors;
                 throw new BadCredentialsException($errorsString);
             }
-
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
-                $data["password"]
+                $user->getPassword()
             );
             $user->setPassword($hashedPassword);
             $user = $userRepository->saveUser($user);
