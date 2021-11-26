@@ -51,7 +51,7 @@ class RegistrationController extends AbstractController
                 'user'  => $user->getUserIdentifier(),
                 'token' => "",
             ]);
-        } catch (ExceptionInterface $exception) {
+        } catch (\Exception $exception) {
             return $this->json([
                 'exception'  => $exception->getMessage(),
                 'token' => "",
