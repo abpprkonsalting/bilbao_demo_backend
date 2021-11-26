@@ -67,16 +67,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function saveUser(User $user) 
     {
-        try {
-            if (!$user instanceof User) {
-                throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
-            }
-            $this->_em->persist($user);
-            $this->_em->flush();
-            return $user;
-        }
-        catch(\Exception $exception) {
-            return null;
-        }
+        $this->_em->persist($user);
+        $this->_em->flush();
+        return $user;
     }
 }

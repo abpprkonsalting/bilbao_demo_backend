@@ -43,9 +43,6 @@ class RegistrationController extends AbstractController
             );
             $user->setPassword($hashedPassword);
             $user = $userRepository->saveUser($user);
-            if ($user == null) {
-                throw new UnsupportedUserException(sprintf('general error saving user "%s" in database.', $data["username"]));
-            }
             return $this->json([
                 'user'  => $user->getUserIdentifier(),
                 'token' => "",
