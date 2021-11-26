@@ -117,6 +117,9 @@
             "config/packages/dev/jms_serializer.yaml"
         ]
     },
+    "karriere/json-decoder": {
+        "version": "v4.1.0"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
@@ -137,6 +140,9 @@
     },
     "phar-io/version": {
         "version": "3.1.0"
+    },
+    "php-di/phpdoc-reader": {
+        "version": "2.2.1"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
