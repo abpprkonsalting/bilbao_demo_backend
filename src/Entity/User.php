@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -23,6 +25,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
+    #[Assert\Email(
+        message: 'The email {{ value }} is not a valid email.',
+        mode: 'html5'
+        )]
+    #[Assert\NotBlank(
+        message: 'The email can not be empty.'
+        )]
     private $email;
 
     /**
@@ -34,11 +43,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
+    #[Assert\NotBlank(
+        message: 'Password can not be empty.'
+        )]
+    // #[RollerworksPassword\PasswordStrength(
+    //     minStrength:4
+    //     )]
+    #[RollerworksPassword\PasswordRequirements(
+        minLength:8,
+        requireLetters:true,
+        requireNumbers:true, 
+        requireCaseDiff:true,
+        requireSpecialCharacter:true
+        )]
     private $password;
 
-    public function __construct($email)
+    public function __construct($email= null,$password = null)
     {
-        $this->setEmail($email);
+        if ($email != null) $this->setEmail($email);
+        if ($password != null) $this->setPassword($password);
     }
 
     public function getId(): ?int
