@@ -23,7 +23,7 @@ class RegistrationController extends AbstractController
         $this->jsonDecoder = new JsonDecoder();
     }
 
-    #[Route('/api/register', methods: ['POST'])]
+    #[Route('/register', methods: ['POST'])]
     public function index(Request $request, UserPasswordHasherInterface $passwordHasher, 
                             UserRepository $userRepository, ValidatorInterface $validator)
     {

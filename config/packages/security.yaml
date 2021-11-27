@@ -6,6 +6,10 @@ security:
         App\Entity\User:
             algorithm: auto
 
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -17,9 +21,27 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
+
+        login:
             lazy: true
+            pattern: ^/login
             provider: app_user_provider
+
+            json_login:
+                # api_login is a route we will create below
+                check_path: api_login
+                username_path: email
+                password_path: password
+
+        api:
+            lazy: true
+            pattern: ^/api/
+            security: true
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
+            
+        main:
+            security: false
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -32,9 +54,11 @@ security:
     access_control:
 
         # allow unauthenticated users to access the register form
-        - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
         # allow unauthenticated users to access the login form
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: '^/login', roles: PUBLIC_ACCESS }
+        #- { path: '^/api', roles: ROLE_USER }
+        #- { path: '^/', roles: ROLE_USER }
 
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
