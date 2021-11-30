@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class ApiLoginController extends AbstractController
 {
-    #[Route('/login', name: 'api_login')]
+    #[Route('/login', name: 'api_login', methods: ['POST'])]
     public function index(): Response
     {
         $user = $this->getUser() ? $this->getUser() : null;
