@@ -61,6 +61,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "test": [
+            "./bin/phpunit --coverage-html coverage"
         ]
     },
     "conflict": {

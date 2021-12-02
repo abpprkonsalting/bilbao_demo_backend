@@ -23,7 +23,9 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <coverage 
+        processUncoveredFiles="true"
+        cacheDirectory="var/coverage">
         <include>
             <directory suffix=".php">src</directory>
         </include>
