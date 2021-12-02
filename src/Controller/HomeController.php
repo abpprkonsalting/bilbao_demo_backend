@@ -8,8 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class WebTestController extends AbstractController
+class HomeController extends AbstractController
 {
+
+    #[Route('/', name: 'homepage')]
+    public function homepage(): RedirectResponse
+    {
+        return new RedirectResponse('/web');
+    }
+
     #[Route('/web', name: 'web_test')]
     public function index(): Response
     {
@@ -17,16 +24,5 @@ class WebTestController extends AbstractController
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/WebTestController.php',
         ]);
-    }
-
-    #[Route('/', name: 'homepage')]
-    public function homepage(): RedirectResponse
-    {
-        return new RedirectResponse('/web');
-        // return $this->json([
-        //     'exception'  => "",
-        //     'token' => "",
-        //     'code'  => ""
-        // ]);
     }
 }
