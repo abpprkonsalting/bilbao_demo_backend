@@ -4,7 +4,7 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class WebTestControllerTest extends WebTestCase
+class HomeControllerTest extends WebTestCase
 {
     public function testHomeRedirectToWeb()
     {
