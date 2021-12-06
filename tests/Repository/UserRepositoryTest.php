@@ -4,9 +4,10 @@ namespace App\Tests\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Psr\Container\ContainerInterface;
+use stdClass;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class UserRepositoryTest extends KernelTestCase
 {
@@ -61,5 +62,14 @@ class UserRepositoryTest extends KernelTestCase
         $userFromRepo  = $this->userRepository->findOneByEmail($user->getEmail());
         $this->assertEquals($hashedPassword, $userFromRepo->getPassword());
         $this->assertNotEquals($user->getPassword(),$oldPassword);
+    }
+
+    public function testBreakUpgradePassword()
+    {
+        $this->initialize();
+        $user = new stdClass();
+        $hashedPassword = "";
+        $this->expectException(\TypeError::class);
+        $user = $this->userRepository->upgradePassword($user,$hashedPassword);
     }
 }
