@@ -20,6 +20,6 @@ class ErrorController extends AbstractController
 {
     public function index():RedirectResponse
     {
-        return new RedirectResponse('/web');
+//        return new RedirectResponse('/web');
     }
 }
