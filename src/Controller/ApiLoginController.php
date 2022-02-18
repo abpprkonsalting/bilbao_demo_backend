@@ -12,8 +12,11 @@ class ApiLoginController extends AbstractController
     #[Route('/login', name: 'api_login', methods: ['POST'])]
     public function index(): Response
     {
+	$user = $this->getUser();
         $payload = [
-            "user" => $this->getUser()->getUserIdentifier(),
+            "id" => $user->getId(),
+            "email" => $user->getUserIdentifier(),
+            "roles" => $user->getRoles(),
             "expire"  => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
         ];
         $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'), 'HS256');
