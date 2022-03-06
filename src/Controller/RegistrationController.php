@@ -8,11 +8,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Karriere\JsonDecoder\JsonDecoder;
+use Symfony\Component\HttpFoundation\Response;
+use Firebase\JWT\JWT;
 
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use stdClass;
 
 class RegistrationController extends AbstractController
 {
@@ -28,7 +31,14 @@ class RegistrationController extends AbstractController
                             UserRepository $userRepository, ValidatorInterface $validator)
     {
         try {
-            $user = $this->jsonDecoder->decode($request->getContent(), User::class);
+            $content = $request->getContent();
+            //$user = $this->jsonDecoder->decode($content, User::class,'user');
+            $decoded = json_decode($content,true);
+            $user = $this->jsonDecoder->decodeArray($decoded['user'], User::class);
+            $s_admin_secret = $this->getParameter('super_admin_secret');
+            if (isset($decoded['superAdminPassword']) && $decoded['superAdminPassword'] == $s_admin_secret) {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
             $errors = $validator->validate($user);
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
@@ -40,16 +50,22 @@ class RegistrationController extends AbstractController
             );
             $user->setPassword($hashedPassword);
             $user = $userRepository->saveUser($user);
+            $payload = [
+                "id" => $user->getId(),
+                "email" => $user->getUserIdentifier(),
+                "roles" => $user->getRoles(),
+                "expire"  => (new \DateTime())->modify("+5 minutes")->getTimestamp(),
+            ];
+            $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'), 'HS256');
             return $this->json([
                 'user'  => $user->getUserIdentifier(),
-                'token' => "",
+                'token' => $jwt,
+            ]);
+            return $this->json([
+                'user'  => ""
             ]);
         } catch (\Exception $exception) {
-            return $this->json([
-                'exception'  => $exception->getMessage(),
-                'token' => "",
-                'code'  => $exception->getCode()
-            ]);
+            return New Response($exception->getMessage(),500);
         }
     }
 }
