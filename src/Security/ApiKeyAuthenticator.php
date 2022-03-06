@@ -53,7 +53,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
                 $this->params->get('jwt_secret'),
                 ['HS256']
             );
-            $email = $jwt["user"];
+            $email = $jwt["email"];
             $expire = $jwt["expire"];   // For implementing expiration & token regeneration further on..
             return new SelfValidatingPassport(new UserBadge($email));
         } catch (\Exception $exception) {
