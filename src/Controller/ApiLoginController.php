@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Firebase\JWT\JWT;
 
 class ApiLoginController extends AbstractController
 {
     #[Route('/login', name: 'api_login', methods: ['POST'])]
-    public function index(): Response
+    public function index(): JsonResponse
     {
 	$user = $this->getUser();
         $payload = [
